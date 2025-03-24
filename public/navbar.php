@@ -6,7 +6,6 @@
         nav {
             background-color: #80ed99;
             overflow: hidden;
-            border-radius: 25px;
         }
 
         nav ul {
@@ -14,6 +13,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            font-size: 1.2rem;
         }
 
         nav ul li {

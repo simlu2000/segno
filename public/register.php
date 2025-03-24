@@ -12,6 +12,7 @@ if ($conn->connect_error) {
 }
 
 // Controllo se l'utente esiste già
+//uso una query preparata per evitare SQL injection
 $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?"); // Preparo la query
 $stmt->bind_param("s", $email); // Collego i parametri della query con le variabili PHP che contengono i dati. "s" sta per stringa
 $stmt->execute(); // Eseguo la query
