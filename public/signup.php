@@ -7,13 +7,17 @@
     <title>Login / Registrazione</title>
     <style>
         body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #c2e9fb); 
+            color: #333;
             display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            display:flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-            font-family: sans-serif;
         }
 
         .form-container {

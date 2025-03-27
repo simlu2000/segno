@@ -9,11 +9,11 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Segno - App Note</title>
     <style>
-         body {
+        body {
             font-family: 'Quicksand', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e0f7fa, #c2e9fb); 
+            background: linear-gradient(135deg, #e0f7fa, #c2e9fb);
             color: #333;
             display: flex;
             flex-direction: column;
@@ -27,6 +27,7 @@ session_start();
             justify-content: center;
             align-items: center;
             padding: 20px;
+            margin-top: -20%;
         }
 
         .content h1 {
@@ -41,28 +42,20 @@ session_start();
             max-width: 600px;
             text-align: center;
         }
-
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background-color: rgba(255, 255, 255, 0.8); 
-            font-size: 0.9rem;
-            color: #777;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-    <?php include "./navbar.php"?>
+    <?php include "./navbar.php" ?>
 
     <div class="content">
-        <h1>Benvenuto in Segno</h1>
-        <p>Segno è una semplice app per prendere appunti. Puoi usarla per annotare idee o scrivere promemoria. Per iniziare, registrati o accedi.</p>
+        <h1>Le tue note</h1>
     </div>
 
-   <?php include "./footer.php"?>
+    <?php include "./footer.php" ?>
+
 </body>
 
 </html>
