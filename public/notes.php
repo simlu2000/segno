@@ -52,7 +52,7 @@ session_start();
 
         .btn-action {
             background-color: #006f8c;
-            width:200px;
+            width: 200px;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -143,15 +143,37 @@ session_start();
         }
 
         .message {
-            background-color: #006f8c;
-            color: white;
+            background-color: #c2e9fb;
+            color: #ffffff;
             text-align: center;
             padding: 10px;
             margin-top: 20px;
             border-radius: 8px;
             display: block;
-            height: 25px;
+            height: auto;
+            width: auto;
+            font-size: 0.8rem;
         }
+
+        #category {
+            width: 100px;
+        }
+
+        #category option {
+            color: #000;
+        }
+        .note-content{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left:15%;
+            margin-right:15%;
+            width:auto;
+            }
+        #notebox{
+            margin-bottom: 15%;
+        }
+      
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -183,7 +205,42 @@ session_start();
                     <textarea id="body" name="body" rows="4" required></textarea>
 
                     <label for="category">Categoria:</label>
-                    <input type="text" id="category" name="category">
+                    <!-- Carico le categorie dal database -->
+                    <?php
+                    $conn = new mysqli("localhost", "root", "", "segno");
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+                    $stmt->bind_param("s", $_SESSION["email"]);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $userId = $row['id'];
+
+                        // Prendo le note dal database
+                        $stmt = $conn->prepare("SELECT * FROM categories WHERE userId = ?");
+                        $stmt->bind_param("i", $userId);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows > 0) { // Se ci sono categorie
+                            echo "<select id='category' name='category' required>";
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
+                            }
+                            echo "</select>";
+                        } else {
+                            echo "<p>Non ci sono categorie inserite
+                                </p>";
+                        }
+                    } else {
+                        echo "Utente non trovato";
+                    }
+                    ?>
 
                     <button type="submit">Salva</button>
                 </form>
@@ -203,43 +260,86 @@ session_start();
             </div>
         </div>
 
-    <?php } else { ?>
-        <div class="content">
-            <h1 classs="welcome">Benvenuto su Segno</h1>
-            <p>Per iniziare a salvare le tue note, effettua il <a href="signup.php">login</a> o <a href="signup.php">registrati</a> se non hai ancora un account.</p>
-        </div>
-    <?php } ?>
-    <?php include "./footer.php" ?>
 
-    <script>
-        function openNoteDialog($dialog) {
-            if ($dialog === "catDialog") {
-                document.getElementById('catDialog').style.display = "block";
+        <!-- Visualizzazione delle note -->
+        <div class="note-content">
+            <?php
+            $conn = new mysqli("localhost", "root", "", "segno");
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->bind_param("s", $_SESSION["email"]);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $userId = $row['id'];
+
+                // Prendo le note dal database
+                $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ?");
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) { // Se ci sono note
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<div id='notebox'/>";
+                        echo "<div style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
+                        echo "<h2>" . $row['title'] . "</h2>";
+                        echo "<p>" . $row['body'] . "</p>";
+                        echo "<p><strong>Categoria:</strong> " . $row['category'] . "</p>";
+                        echo "</div>";
+                        echo "</div>";
+
+                    }
+                } else {
+                    echo "<p>Non ci sono note
+                    </p>";
+                }
             } else {
-                document.getElementById('noteDialog').style.display = "block";
+                echo "Utente non trovato";
             }
-        }
+            ?>
 
-        function closeNoteDialog($dialog) {
-            if ($dialog === "catDialog") {
-                document.getElementById('catDialog').style.display = "none";
-            } else {
-                document.getElementById('noteDialog').style.display = "none";
+        <?php } else { ?>
+            <div class="content">
+                <h1 classs="welcome">Benvenuto su Segno</h1>
+                <p>Per iniziare a salvare le tue note, effettua il <a href="signup.php">login</a> o <a href="signup.php">registrati</a> se non hai ancora un account.</p>
+            </div>
+        <?php } ?>
+
+        <script>
+            function openNoteDialog($dialog) {
+                if ($dialog === "catDialog") {
+                    document.getElementById('catDialog').style.display = "block";
+                } else {
+                    document.getElementById('noteDialog').style.display = "block";
+                }
             }
-        }
 
-        //se utente clicca fuori dal dialog, chiudo
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('noteDialog')) {
-                document.getElementById('noteDialog').style.display = "none";
+            function closeNoteDialog($dialog) {
+                if ($dialog === "catDialog") {
+                    document.getElementById('catDialog').style.display = "none";
+                } else {
+                    document.getElementById('noteDialog').style.display = "none";
+                }
             }
-        }
+
+            //se utente clicca fuori dal dialog, chiudo
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('noteDialog')) {
+                    document.getElementById('noteDialog').style.display = "none";
+                }
+            }
 
 
-        setTimeout(function() {
-            document.querySelector('.message').style.display = 'none';
-        }, 3000);
-    </script>
+            setTimeout(function() {
+                document.querySelector('.message').style.display = 'none';
+            }, 3000);
+        </script>
 </body>
 
 </html>
