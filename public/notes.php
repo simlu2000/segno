@@ -27,13 +27,14 @@ session_start();
             justify-content: center;
             align-items: center;
             padding: 20px;
-            margin-top: -20%;
         }
 
         .content h1 {
             font-size: 4rem;
             margin-bottom: 10px;
-            color: #4a4a4a;
+            color: #4a4a4a;            
+            margin-top: -20%;
+
         }
 
         .content p {
