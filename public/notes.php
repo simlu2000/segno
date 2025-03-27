@@ -32,9 +32,15 @@ session_start();
         .content h1 {
             font-size: 4rem;
             margin-bottom: 10px;
-            color: #4a4a4a;            
-            margin-top: -20%;
+            color: #4a4a4a;
+        }
 
+        .your {
+            margin-top: -10%;
+        }
+
+        .welcome {
+            margin-top: 20%;
         }
 
         .content p {
@@ -44,8 +50,9 @@ session_start();
             text-align: center;
         }
 
-        .add-note-btn {
+        .btn-action {
             background-color: #006f8c;
+            width:200px;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -59,36 +66,48 @@ session_start();
             transition: background-color 0.3s ease;
         }
 
-        .note-dialog {
-            display: none;
+        .dialog {
             position: fixed;
             z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
         }
 
+        .cat-dialog-content,
         .note-dialog-content {
-            background-color: #fefefe;
-            margin: 15% auto;
+            background-color: #fff;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
             max-width: 600px;
             border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: auto;
+            margin: 10% auto;
+
         }
 
+        .cat-dialog-content label,
+        .cat-dialog-content input,
         .note-dialog-content label,
         .note-dialog-content input,
         .note-dialog-content textarea {
-            display: block;
             margin-bottom: 10px;
             width: calc(100% - 22px);
         }
 
+        .cat-dialog-content button,
         .note-dialog-content button {
             background-color: #008CBA;
             border: none;
@@ -101,8 +120,10 @@ session_start();
             margin-top: 10px;
             cursor: pointer;
             border-radius: 5px;
+
         }
 
+        .cat-dialog-content button:hover,
         .note-dialog-content button:hover {
             background-color: #006f8c;
         }
@@ -121,7 +142,7 @@ session_start();
             cursor: pointer;
         }
 
-        .message{
+        .message {
             background-color: #006f8c;
             color: white;
             text-align: center;
@@ -129,7 +150,7 @@ session_start();
             margin-top: 20px;
             border-radius: 8px;
             display: block;
-            height:25px;
+            height: 25px;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -138,46 +159,73 @@ session_start();
 
 <body>
     <?php include "./navbar.php" ?>
+    <?php if (isset($_SESSION["email"])) { ?>
 
-    <div class="content">
-        <h1>Le tue note</h1>
-        <button class="add-note-btn" onclick="openNoteDialog()">Aggiungi Nota</button>
-        <?php if (isset($_SESSION["message"])) { ?>
-            <div class="message">
-                <p><?php echo $_SESSION["message"]; ?></p>
-            </div>
-            <?php unset($_SESSION["message"]); ?>
-        <?php } ?>
-    </div>
-
-    <div id="noteDialog" class="note-dialog">
-        <div class="note-dialog-content">
-            <span class="close-btn" onclick="closeNoteDialog()">&times;</span>
-            <h2>Aggiungi una nuova nota</h2>
-            <form id="addNoteForm" action="addNewNote.php" method="post">
-                <label for="title">Titolo:</label>
-                <input type="text" id="title" name="title" required>
-
-                <label for="body">Testo:</label>
-                <textarea id="body" name="body" rows="4" required></textarea>
-
-                <label for="category">Categoria:</label>
-                <input type="text" id="category" name="category">
-
-                <button type="submit">Salva Nota</button>
-            </form>
+        <div class="content">
+            <h1 class="your">Le tue note</h1>
+            <?php if (isset($_SESSION["message"])) { ?>
+                <div class="message">
+                    <p><?php echo $_SESSION["message"]; ?></p>
+                </div>
+                <?php unset($_SESSION["message"]); ?>
+            <?php } ?>
         </div>
-    </div>
 
+        <div id="noteDialog" class="dialog">
+            <div class="note-dialog-content">
+                <span class="close-btn" onclick="closeNoteDialog('noteDialog')">&times;</span>
+                <h2>Aggiungi una nuova nota</h2>
+                <form id="addNoteForm" action="addNewNote.php" method="post">
+                    <label for="title">Titolo:</label>
+                    <input type="text" id="title" name="title" required>
+
+                    <label for="body">Testo:</label>
+                    <textarea id="body" name="body" rows="4" required></textarea>
+
+                    <label for="category">Categoria:</label>
+                    <input type="text" id="category" name="category">
+
+                    <button type="submit">Salva</button>
+                </form>
+            </div>
+        </div>
+
+
+        <div id="catDialog" class="dialog">
+            <div class="cat-dialog-content">
+                <span class="close-btn" onclick="closeNoteDialog('catDialog')">&times;</span>
+                <h2>Aggiungi una nuova categoria</h2>
+                <form id="addNoteForm" action="addNewCat.php" method="post">
+                    <label for="category">Nome:</label>
+                    <input type="text" id="category" name="category" required>
+                    <button type="submit">Salva</button>
+                </form>
+            </div>
+        </div>
+
+    <?php } else { ?>
+        <div class="content">
+            <h1 classs="welcome">Benvenuto su Segno</h1>
+            <p>Per iniziare a salvare le tue note, effettua il <a href="signup.php">login</a> o <a href="signup.php">registrati</a> se non hai ancora un account.</p>
+        </div>
+    <?php } ?>
     <?php include "./footer.php" ?>
 
     <script>
-        function openNoteDialog() {
-            document.getElementById('noteDialog').style.display = "block";
+        function openNoteDialog($dialog) {
+            if ($dialog === "catDialog") {
+                document.getElementById('catDialog').style.display = "block";
+            } else {
+                document.getElementById('noteDialog').style.display = "block";
+            }
         }
 
-        function closeNoteDialog() {
-            document.getElementById('noteDialog').style.display = "none";
+        function closeNoteDialog($dialog) {
+            if ($dialog === "catDialog") {
+                document.getElementById('catDialog').style.display = "none";
+            } else {
+                document.getElementById('noteDialog').style.display = "none";
+            }
         }
 
         //se utente clicca fuori dal dialog, chiudo
@@ -186,6 +234,7 @@ session_start();
                 document.getElementById('noteDialog').style.display = "none";
             }
         }
+
 
         setTimeout(function() {
             document.querySelector('.message').style.display = 'none';
