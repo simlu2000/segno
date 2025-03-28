@@ -48,13 +48,13 @@
 <body>
 <nav>
     <ul>
-        <li><a href="index.php"><span class="material-icons">home</span>Home</a></li>
         <?php if (isset($_SESSION["email"])) { ?>
             <li><a href="notes.php"><span class="material-icons">note</span>Le tue note</a></li>
             <li><button onclick="openNoteDialog('noteDialog')"><span class="material-icons">add</span>Nota</button></li>
             <li><button onclick="openNoteDialog('catDialog')"><span class="material-icons">add</span>Categoria</button></li>
             <li><a href="logout.php"><span class="material-icons">logout</span>Logout</a></li>
         <?php } else { ?>
+            <li><a href="index.php"><span class="material-icons">home</span>Home</a></li>
             <li><a href="signup.php"><span class="material-icons">login</span>Login</a></li>
         <?php } ?>
     </ul>

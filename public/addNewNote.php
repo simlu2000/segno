@@ -25,11 +25,12 @@ if ($result->num_rows > 0) { // Se l'utente esiste già
     $userId = $row['id'];
 
     // Inserisco la nota nel database
-    $stmt = $conn->prepare("INSERT INTO notes(userId,title,body,category) VALUES ('$userId', '$title', '$body', '$category')");
+    $stmt = $conn->prepare("INSERT INTO notes(userId,title,body,category) VALUES (?,?,?,?)");
+    $stmt->bind_param("isss", $userId, $title, $body, $category); // isss sta per intero, stringa, stringa, stringa
     $stmt->execute(); // Eseguo la query
-    $result = $stmt->get_result(); // Ottengo il risultato della query
+
     $_SESSION["message"] = "Nota aggiunta con successo";
-    header("Location: notes.php"); 
+    header("Location: notes.php");
 } else {
     echo "Utente non trovato";
     //se utente non esiste, non inserisco la nota nel database
@@ -37,4 +38,3 @@ if ($result->num_rows > 0) { // Se l'utente esiste già
 
 $stmt->close(); // Chiudo lo statement
 $conn->close(); // Chiudo la connessione al database
-?>

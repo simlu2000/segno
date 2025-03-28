@@ -36,7 +36,7 @@ session_start();
         }
 
         .your {
-            margin-top: -10%;
+            margin-top: 10%;
         }
 
         .welcome {
@@ -162,18 +162,45 @@ session_start();
         #category option {
             color: #000;
         }
-        .note-content{
+
+        .note-content {
             display: flex;
             flex-direction: row;
-            align-items: center;
-            margin-left:15%;
-            margin-right:15%;
-            width:auto;
-            }
-        #notebox{
-            margin-bottom: 15%;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            margin-left: 15%;
+            margin-right: 15%;
+            width: auto;
+            justify-content: flex-start;
         }
-      
+
+        #notebox {
+            margin-bottom: 10%;
+            width: 100%;
+        }
+
+        .note {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .note {
+                width: calc(50% - 20px);
+                /* 2 note per riga su schermi più piccoli */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .note {
+                width: calc(100% - 20px);
+                /* 1 nota per riga su schermi molto piccoli */
+            }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -222,7 +249,7 @@ session_start();
                         $userId = $row['id'];
 
                         // Prendo le note dal database
-                        $stmt = $conn->prepare("SELECT * FROM categories WHERE userId = ?");
+                        $stmt = $conn->prepare("SELECT catname FROM categories WHERE userId = ?");
                         $stmt->bind_param("i", $userId);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -230,12 +257,12 @@ session_start();
                         if ($result->num_rows > 0) { // Se ci sono categorie
                             echo "<select id='category' name='category' required>";
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
+                                echo "<option value='" . $row['catname'] . "'>" . $row['catname'] . "</option>";
                             }
                             echo "</select>";
                         } else {
-                            echo "<p>Non ci sono categorie inserite
-                                </p>";
+                            echo "<p class='message-note'>Non ci sono categorie inserite
+                                    </p>";
                         }
                     } else {
                         echo "Utente non trovato";
@@ -287,17 +314,17 @@ session_start();
                 if ($result->num_rows > 0) { // Se ci sono note
                     while ($row = $result->fetch_assoc()) {
                         echo "<div id='notebox'/>";
-                        echo "<div style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
+                        echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
                         echo "<h2>" . $row['title'] . "</h2>";
-                        echo "<p>" . $row['body'] . "</p>";
                         echo "<p><strong>Categoria:</strong> " . $row['category'] . "</p>";
+                        echo "<p>" . $row['body'] . "</p>";
                         echo "</div>";
                         echo "</div>";
-
                     }
                 } else {
-                    echo "<p>Non ci sono note
-                    </p>";
+                    echo "<div id='notebox'/>";
+                    echo "<h3 class='your'>Non ci sono note.</h3>";
+                    echo "</div>";
                 }
             } else {
                 echo "Utente non trovato";

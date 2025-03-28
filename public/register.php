@@ -32,7 +32,7 @@ if ($result->num_rows > 0) { // Se l'utente esiste già
         echo "Utente registrato con successo";
         $_SESSION["email"] = $email; // Salvo l'email dell'utente nella sessione
         $_SESSION["username"] = $username; // Salvo l'username dell'utente nella sessione
-        header("Location: index.php"); // Reindirizzo l'utente alla home page
+        header("Location: notes.php"); // Reindirizzo l'utente alla home page
     } else {
         echo "Errore: " . $stmt->error;
     }
