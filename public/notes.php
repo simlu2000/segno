@@ -187,6 +187,20 @@ session_start();
             width: 100%;
             box-sizing: border-box;
         }
+        .delete{
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 0;
+            cursor: pointer;
+            border-radius: 5px;
+            float: right;
+        }
 
         @media (max-width: 768px) {
             .note {
@@ -232,42 +246,9 @@ session_start();
                     <textarea id="body" name="body" rows="4" required></textarea>
 
                     <label for="category">Categoria:</label>
+
                     <!-- Carico le categorie dal database -->
-                    <?php
-                    $conn = new mysqli("localhost", "root", "", "segno");
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-
-                    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-                    $stmt->bind_param("s", $_SESSION["email"]);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-                        $userId = $row['id'];
-
-                        // Prendo le note dal database
-                        $stmt = $conn->prepare("SELECT catname FROM categories WHERE userId = ?");
-                        $stmt->bind_param("i", $userId);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        if ($result->num_rows > 0) { // Se ci sono categorie
-                            echo "<select id='category' name='category' required>";
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row['catname'] . "'>" . $row['catname'] . "</option>";
-                            }
-                            echo "</select>";
-                        } else {
-                            echo "<p class='message-note'>Non ci sono categorie inserite
-                                    </p>";
-                        }
-                    } else {
-                        echo "Utente non trovato";
-                    }
-                    ?>
+                    <?php include "./printCategory.php" ?>
 
                     <button type="submit">Salva</button>
                 </form>
@@ -290,46 +271,8 @@ session_start();
 
         <!-- Visualizzazione delle note -->
         <div class="note-content">
-            <?php
-            $conn = new mysqli("localhost", "root", "", "segno");
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-            $stmt->bind_param("s", $_SESSION["email"]);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $userId = $row['id'];
-
-                // Prendo le note dal database
-                $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ?");
-                $stmt->bind_param("i", $userId);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) { // Se ci sono note
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<div id='notebox'/>";
-                        echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
-                        echo "<h2>" . $row['title'] . "</h2>";
-                        echo "<p><strong>Categoria:</strong> " . $row['category'] . "</p>";
-                        echo "<p>" . $row['body'] . "</p>";
-                        echo "</div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "<div id='notebox'/>";
-                    echo "<h3 class='your'>Non ci sono note.</h3>";
-                    echo "</div>";
-                }
-            } else {
-                echo "Utente non trovato";
-            }
-            ?>
+            <?php include "./printNotes.php" ?>
+        </div>
 
         <?php } else { ?>
             <div class="content">
@@ -361,7 +304,6 @@ session_start();
                     document.getElementById('noteDialog').style.display = "none";
                 }
             }
-
 
             setTimeout(function() {
                 document.querySelector('.message').style.display = 'none';
