@@ -79,7 +79,7 @@ session_start();
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #e0f7fa, #c2e9fb);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -91,7 +91,7 @@ session_start();
             background-color: #fff;
             padding: 20px;
             border: 1px solid #888;
-            max-width: 90%; 
+            max-width: 50%;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             transform: translateY(0);
@@ -169,20 +169,17 @@ session_start();
 
         .note-content {
             display: flex;
-            flex-direction: row;
             flex-wrap: wrap;
-            align-items: flex-start;
-            margin: 5% auto; 
-            width: 90%;
             justify-content: flex-start;
+            gap: 10px;
+            width: auto;
+            margin-left:15%;
+            margin-right:15%;
+            padding: 20px;
             background-color: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(5px);
             border-radius: 25px;
-        }
-
-        #notebox {
-            margin-bottom: 10%;
-            width: 100%;
+            overflow: auto;
         }
 
         .note {
@@ -190,9 +187,18 @@ session_start();
             border-radius: 8px;
             padding: 10px;
             margin: 10px;
-            width: calc(100% - 20px);
             box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            max-width: 100%;
+            white-space: normal;
         }
+
+        #notebox {
+            margin-bottom: 10%;
+            width: 100%;
+        }
+
 
         .delete {
             background-color: #f44336;
@@ -208,31 +214,50 @@ session_start();
             border-radius: 5px;
             float: right;
         }
+       
 
-        @media (min-width: 768px) {
+        @media (min-width: 1200px) {
+            .note {
+                width: calc(33.33% - 20px);
+                /* 3 note per riga */
+            }
+        }
+
+        @media (max-width: 1199px) and (min-width: 768px) {
             .note {
                 width: calc(50% - 20px);
+                /* 2 note per riga */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .note-dialog-content,
+            .cat-dialog-content {
+                width: 90%;
+                margin-top: 10%;
+            }
+            .close-btn {
+                font-size: 24px;
             }
         }
 
         @media (max-width: 491px) {
             #noteDialog {
-                width:90%;
+                width: 90%;
             }
-            .note-dialog-content{
-                margin-top:65%;
+            .cat-dialog-content,
+            .note-dialog-content {
+                margin-top: 65%;
+                max-width: 90%;
             }
         }
 
         @media (max-width: 376px) {
-            .note-dialog-content{
-                margin-top:45%;
-            }
-        }
+            .cat-dialog-content,
+            .note-dialog-content {
+                margin-top: 45%;
+                max-width: 80%;
 
-        @media (min-width: 1200px) {
-            .note {
-                width: calc(33.33% - 20px);
             }
         }
     </style>
@@ -265,7 +290,7 @@ session_start();
                     <label for="body">Testo:</label>
                     <textarea id="body" name="body" rows="4" required></textarea>
 
-                    <label for="category">Categoria:</label> 
+                    <label for="category">Categoria:</label>
 
                     <!-- Carico le categorie dal database -->
                     <?php include "./printCategory.php" ?>

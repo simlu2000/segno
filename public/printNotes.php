@@ -21,9 +21,9 @@ if ($result->num_rows > 0) {
 
     if ($result->num_rows > 0) { 
         while ($row = $result->fetch_assoc()) {
-            echo "<div id='note_" . $row['id'] . "'>";  
-            echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'>Elimina</button>";
+            echo "<div id='note" . $row['id'] . "'>";  
             echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
+            echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'>Elimina</button>";
             echo "<h2>" . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . "</h2>";
             echo "<p><strong>Categoria:</strong> " . htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8') . "</p>";
             echo "<p>" . htmlspecialchars($row['body'], ENT_QUOTES, 'UTF-8') . "</p>";
