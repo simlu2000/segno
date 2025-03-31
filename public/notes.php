@@ -30,13 +30,19 @@ session_start();
         }
 
         .content h1 {
-            font-size: 4rem;
+            font-size: 3rem;
             margin-bottom: 10px;
             color: #4a4a4a;
+            text-align: center;
         }
 
         .your {
-            margin-top: 10%;
+            margin-top: 5%;
+        }
+
+        .errorNote {
+            margin-left: 5%;
+            margin-top: 5%;
         }
 
         .welcome {
@@ -44,7 +50,7 @@ session_start();
         }
 
         .content p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #666;
             max-width: 600px;
             text-align: center;
@@ -85,7 +91,7 @@ session_start();
             background-color: #fff;
             padding: 20px;
             border: 1px solid #888;
-            max-width: 600px;
+            max-width: 90%; 
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             transform: translateY(0);
@@ -95,7 +101,6 @@ session_start();
             align-items: center;
             width: auto;
             margin: 10% auto;
-
         }
 
         .cat-dialog-content label,
@@ -120,7 +125,6 @@ session_start();
             margin-top: 10px;
             cursor: pointer;
             border-radius: 5px;
-
         }
 
         .cat-dialog-content button:hover,
@@ -168,10 +172,12 @@ session_start();
             flex-direction: row;
             flex-wrap: wrap;
             align-items: flex-start;
-            margin-left: 15%;
-            margin-right: 15%;
-            width: auto;
+            margin: 5% auto; 
+            width: 90%;
             justify-content: flex-start;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 25px;
         }
 
         #notebox {
@@ -184,10 +190,11 @@ session_start();
             border-radius: 8px;
             padding: 10px;
             margin: 10px;
-            width: 100%;
+            width: calc(100% - 20px);
             box-sizing: border-box;
         }
-        .delete{
+
+        .delete {
             background-color: #f44336;
             color: white;
             border: none;
@@ -202,17 +209,30 @@ session_start();
             float: right;
         }
 
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
             .note {
                 width: calc(50% - 20px);
-                /* 2 note per riga su schermi più piccoli */
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 491px) {
+            #noteDialog {
+                width:90%;
+            }
+            .note-dialog-content{
+                margin-top:65%;
+            }
+        }
+
+        @media (max-width: 376px) {
+            .note-dialog-content{
+                margin-top:45%;
+            }
+        }
+
+        @media (min-width: 1200px) {
             .note {
-                width: calc(100% - 20px);
-                /* 1 nota per riga su schermi molto piccoli */
+                width: calc(33.33% - 20px);
             }
         }
     </style>
@@ -245,11 +265,11 @@ session_start();
                     <label for="body">Testo:</label>
                     <textarea id="body" name="body" rows="4" required></textarea>
 
-                    <label for="category">Categoria:</label>
+                    <label for="category">Categoria:</label> 
 
                     <!-- Carico le categorie dal database -->
                     <?php include "./printCategory.php" ?>
-
+                    <br>
                     <button type="submit">Salva</button>
                 </form>
             </div>
@@ -274,41 +294,41 @@ session_start();
             <?php include "./printNotes.php" ?>
         </div>
 
-        <?php } else { ?>
-            <div class="content">
-                <h1 classs="welcome">Benvenuto su Segno</h1>
-                <p>Per iniziare a salvare le tue note, effettua il <a href="signup.php">login</a> o <a href="signup.php">registrati</a> se non hai ancora un account.</p>
-            </div>
-        <?php } ?>
+    <?php } else { ?>
+        <div class="content">
+            <h1 classs="welcome">Benvenuto su Segno</h1>
+            <p>Per iniziare a salvare le tue note, effettua il <a href="signup.php">login</a> o <a href="signup.php">registrati</a> se non hai ancora un account.</p>
+        </div>
+    <?php } ?>
 
-        <script>
-            function openNoteDialog($dialog) {
-                if ($dialog === "catDialog") {
-                    document.getElementById('catDialog').style.display = "block";
-                } else {
-                    document.getElementById('noteDialog').style.display = "block";
-                }
+    <script>
+        function openNoteDialog($dialog) {
+            if ($dialog === "catDialog") {
+                document.getElementById('catDialog').style.display = "block";
+            } else {
+                document.getElementById('noteDialog').style.display = "block";
             }
+        }
 
-            function closeNoteDialog($dialog) {
-                if ($dialog === "catDialog") {
-                    document.getElementById('catDialog').style.display = "none";
-                } else {
-                    document.getElementById('noteDialog').style.display = "none";
-                }
+        function closeNoteDialog($dialog) {
+            if ($dialog === "catDialog") {
+                document.getElementById('catDialog').style.display = "none";
+            } else {
+                document.getElementById('noteDialog').style.display = "none";
             }
+        }
 
-            //se utente clicca fuori dal dialog, chiudo
-            window.onclick = function(event) {
-                if (event.target == document.getElementById('noteDialog')) {
-                    document.getElementById('noteDialog').style.display = "none";
-                }
+        //se utente clicca fuori dal dialog, chiudo
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('noteDialog')) {
+                document.getElementById('noteDialog').style.display = "none";
             }
+        }
 
-            setTimeout(function() {
-                document.querySelector('.message').style.display = 'none';
-            }, 3000);
-        </script>
+        setTimeout(function() {
+            document.querySelector('.message').style.display = 'none';
+        }, 3000);
+    </script>
 </body>
 
 </html>

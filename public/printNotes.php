@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
         }
     } else {
         echo "<div id='notebox'/>";
-        echo "<h3 class='your'>Non ci sono note.</h3>";
+        echo "<h3 class='errorNote'>Non ci sono note.</h3>";
         echo "</div>";
     }
 } else {
@@ -45,7 +45,7 @@ if ($result->num_rows > 0) {
         if (confirm("Sei sicuro di voler eliminare questa nota?")) {
             //nuova richiesta HTTP
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "delete_note.php", true);
+            xhr.open("POST", "deleteNote.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
             //risposta dal server
