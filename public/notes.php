@@ -13,11 +13,28 @@ session_start();
             font-family: 'Quicksand', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e0f7fa, #c2e9fb);
+            background: linear-gradient(323deg, #e0f7fa, #c2e9fb, #7AFFEF);
+            background-size: 180% 180%;
+            animation: gradient-animation 15s ease infinite;
             color: #333;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .content {
@@ -57,7 +74,7 @@ session_start();
         }
 
         .btn-action {
-            background-color: #006f8c;
+            background-color:rgb(41, 219, 198);
             width: 200px;
             border: none;
             color: white;
@@ -83,6 +100,7 @@ session_start();
             justify-content: center;
             align-items: center;
             display: none;
+            
         }
 
         .cat-dialog-content,
@@ -113,7 +131,7 @@ session_start();
 
         .cat-dialog-content button,
         .note-dialog-content button {
-            background-color: #008CBA;
+            background-color:rgb(41, 219, 198);
             border: none;
             color: white;
             padding: 10px 20px;

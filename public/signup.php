@@ -10,7 +10,9 @@
             font-family: 'Quicksand', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e0f7fa, #c2e9fb); 
+            background: linear-gradient(323deg, #e0f7fa, #c2e9fb, #7AFFEF);
+            background-size: 180% 180%;
+            animation: gradient-animation 15s ease infinite;            
             color: #333;
             display: flex;
             flex-direction: column;
@@ -18,6 +20,19 @@
             display:flex;
             justify-content: center;
             align-items: center;
+        }
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .form-container {
@@ -46,14 +61,14 @@
         }
 
         .form-container input[type="submit"] {
-            background-color: #4CAF50;
+            background-color:rgb(41, 219, 198);
             color: white;
             border: none;
             cursor: pointer;
         }
 
         .form-container input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color:rgb(41, 219, 198);
         }
 
         .form-container .form-switch {

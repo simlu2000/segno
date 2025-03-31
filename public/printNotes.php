@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
                 try {
                     const response = JSON.parse(xhr.responseText);
                     if (response.success) {
-                        // Rimuove la nota dal DOM senza ricaricare la pagina
+                        //rimuovo nota dal DOM senza ricaricare la pagina
                         const noteBox = document.getElementById("note_" + noteId);
                         if (noteBox) {
                             noteBox.remove();
