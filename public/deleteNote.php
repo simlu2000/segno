@@ -1,16 +1,16 @@
 <?php
 session_start();
+header("Content-Type: application/json");
 
 if (isset($_POST['noteId'])) {
-    $noteId = $_POST['noteId'];
-    
-    // Connessione al database
+    $noteId = intval($_POST['noteId']);
+
     $conn = new mysqli("localhost", "root", "", "segno");
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        echo json_encode(["success" => false, "message" => "Errore di connessione al database"]);
+        exit();
     }
 
-    // Verifica se l'utente è loggato
     if (isset($_SESSION['email'])) {
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s", $_SESSION["email"]);
@@ -21,24 +21,25 @@ if (isset($_POST['noteId'])) {
             $row = $result->fetch_assoc();
             $userId = $row['id'];
 
-            // Elimina la nota solo se appartiene all'utente loggato
+            // Eliminazione della nota
             $stmt = $conn->prepare("DELETE FROM notes WHERE id = ? AND userId = ?");
             $stmt->bind_param("ii", $noteId, $userId);
+            
             if ($stmt->execute()) {
-                echo "Nota eliminata con successo.";
+                echo json_encode(["success" => true, "message" => "Nota eliminata con successo"]);
             } else {
-                echo "Errore nell'eliminazione della nota.";
+                echo json_encode(["success" => false, "message" => "Errore nell'eliminazione della nota"]);
             }
         } else {
-            echo "Utente non trovato.";
+            echo json_encode(["success" => false, "message" => "Utente non trovato"]);
         }
     } else {
-        echo "Utente non loggato.";
+        echo json_encode(["success" => false, "message" => "Utente non loggato"]);
     }
 
     $stmt->close();
     $conn->close();
 } else {
-    echo "ID nota mancante.";
+    echo json_encode(["success" => false, "message" => "ID nota mancante"]);
 }
 ?>

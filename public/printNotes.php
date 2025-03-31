@@ -21,7 +21,7 @@ if ($result->num_rows > 0) {
 
     if ($result->num_rows > 0) { 
         while ($row = $result->fetch_assoc()) {
-            echo "<div id='note" . $row['id'] . "'>";  
+            echo "<div id='note_" . $row['id'] . "'>";
             echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
             echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'>Elimina</button>";
             echo "<h2>" . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . "</h2>";
@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
             echo "</div>";
         }
     } else {
-        echo "<div id='notebox'/>";
+        echo "<div id='notebox'>";
         echo "<h3 class='errorNote'>Non ci sono note.</h3>";
         echo "</div>";
     }
@@ -41,30 +41,35 @@ if ($result->num_rows > 0) {
 
 ?>
 <script>
-    function deleteNote(noteId) {
-        if (confirm("Sei sicuro di voler eliminare questa nota?")) {
-            //nuova richiesta HTTP
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "deleteNote.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+   function deleteNote(noteId) {
+    if (confirm("Sei sicuro di voler eliminare questa nota?")) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "deleteNote.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            //risposta dal server
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert(xhr.responseText);  //risposta dal server (successo o errore)
-                    
-                    //se cancellazione è avvenuta con successo, rimuovo nota dalla pagina
-                    const noteBox = document.getElementById("note_" + noteId);
-                    if (noteBox) {
-                        noteBox.remove();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // Rimuove la nota dal DOM senza ricaricare la pagina
+                        const noteBox = document.getElementById("note_" + noteId);
+                        if (noteBox) {
+                            noteBox.remove();
+                        }
+                    } else {
+                        alert(response.message);
                     }
+                } catch (e) {
+                    alert("Errore nel parsing della risposta del server");
                 }
-            };
+            }
+        };
 
-            //invia id nota da cancellare
-            xhr.send("noteId=" + noteId);
-        }
+        xhr.send("noteId=" + noteId);
     }
+}
+
 </script>
 
 <?php

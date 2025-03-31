@@ -79,7 +79,6 @@ session_start();
             top: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #e0f7fa, #c2e9fb);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -91,15 +90,15 @@ session_start();
             background-color: #fff;
             padding: 20px;
             border: 1px solid #888;
-            max-width: 50%;
-            border-radius: 8px;
+            max-width: 600px;
+            width: 80%;
+            border-radius: 25px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             transform: translateY(0);
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: auto;
             margin: 10% auto;
         }
 
@@ -168,13 +167,12 @@ session_start();
         }
 
         .note-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 10px;
-            width: auto;
-            margin-left:15%;
-            margin-right:15%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            min-width: 60%;
+            margin: 20px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(5px);
@@ -186,11 +184,9 @@ session_start();
             border: 1px solid #ccc;
             border-radius: 8px;
             padding: 10px;
-            margin: 10px;
             box-sizing: border-box;
             overflow-wrap: break-word;
             word-wrap: break-word;
-            max-width: 100%;
             white-space: normal;
         }
 
@@ -198,7 +194,6 @@ session_start();
             margin-bottom: 10%;
             width: 100%;
         }
-
 
         .delete {
             background-color: #f44336;
@@ -214,50 +209,75 @@ session_start();
             border-radius: 5px;
             float: right;
         }
-       
 
+        /* Media query per schermi grandi */
         @media (min-width: 1200px) {
-            .note {
-                width: calc(33.33% - 20px);
-                /* 3 note per riga */
+            .note-content {
+                max-width: 1400px;
+                /* Aumenta la larghezza massima per schermi grandi */
             }
         }
 
+        /* Media query per schermi medi */
         @media (max-width: 1199px) and (min-width: 768px) {
-            .note {
-                width: calc(50% - 20px);
+            .note-content {
+                grid-template-columns: repeat(2, 1fr);
                 /* 2 note per riga */
             }
         }
 
+        /* Media query per schermi piccoli */
         @media (max-width: 767px) {
+            .note-content {
+                grid-template-columns: 1fr;
+                /* 1 nota per riga */
+            }
+
             .note-dialog-content,
             .cat-dialog-content {
                 width: 90%;
                 margin-top: 10%;
             }
+
             .close-btn {
                 font-size: 24px;
             }
         }
 
+        /* Media query per schermi molto piccoli */
         @media (max-width: 491px) {
             #noteDialog {
                 width: 90%;
             }
-            .cat-dialog-content,
+
             .note-dialog-content {
                 margin-top: 65%;
-                max-width: 90%;
+                max-width: 80%;
+            }
+
+            .cat-dialog-content {
+                margin-top: 70%;
+                max-width: 80%;
+            }
+
+            #note {
+                width: 100%;
+            }
+
+            .note-content {
+                margin-right: 5%;
+                margin-left: 5%;
+                width: auto;
             }
         }
 
+        /* Media query per schermi ancora più piccoli */
         @media (max-width: 376px) {
+
             .cat-dialog-content,
             .note-dialog-content {
                 margin-top: 45%;
                 max-width: 80%;
-
             }
         }
     </style>
