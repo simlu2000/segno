@@ -9,6 +9,11 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px 0;
             position: relative;
+            width:auto;
+            margin-left:1%;
+            margin-right:1%;
+            margin-top:1%;
+            border-radius:25px;
         }
 
         nav ul {
