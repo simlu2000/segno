@@ -45,8 +45,87 @@ session_start();
             text-align: center;
         }
 
-        #logo{
-            border-radius:50px;
+        #features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0 5%;
+        }
+
+        #features-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            padding: 20px;
+
+        }
+
+        #features-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature {
+            background-color: rgba(255, 255, 255, 0.54);
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.2rem;
+            color: #333;
+            text-align: center;
+            flex: 1;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        #cta {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px 0;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+        #cta-area{
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+
+        }
+        .btn{
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        #logo {
+            border-radius: 50px;
         }
 
         footer {
@@ -56,8 +135,8 @@ session_start();
             font-size: 0.9rem;
             color: #777;
         }
-        
-        #logo-area{
+
+        #logo-area {
             background-color: rgba(255, 255, 255, 0.5);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 50px;
@@ -87,6 +166,29 @@ session_start();
         <div id="logo-area">
             <img id="logo" src="images/segno.png">
         </div>
+    </div>
+    <div id="features">
+        <div>
+            <h1>Caratteristiche</h1>
+        </div>
+        <div id="features-list">
+            <div class="feature">Interfaccia semplice e intuitiva</div>
+            <div class="feature">Salva i tuoi appunti in modo sicuro</div>
+            <div class="feature">Accesso da qualsiasi dispositivo</div>
+            <div class="feature">Cerca facilmente tra i tuoi appunti</div>
+        </div>
+
+        <?php if(isset($_SESSION['user'])): ?>
+        <div id="cta">
+            <h1>Inizia ora!</h1>
+            <div id="cta-area">
+                <p>Registrati o accedi per iniziare a utilizzare Segno.</p>
+                <a href="login.php" class="btn">Accedi</a>
+            </div>
+        </div>
+        <?php else: ?>
+            <a href="notes.php" class="btn">Vai alle note</a>
+        <?php endif; ?>
     </div>
 
     <?php include "./footer.php" ?>
