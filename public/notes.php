@@ -229,6 +229,19 @@ session_start();
             color: #d32f2f;
         }
 
+        .edit-form input,
+        .edit-form textarea {
+            display: block;
+            margin: 5px 0;
+            width: 100%;
+            padding: 6px;
+        }
+
+        .edit-form button {
+            margin-right: 5px;
+        }
+
+
         /* Media query per schermi grandi */
         @media (min-width: 1200px) {
             .note-content {
