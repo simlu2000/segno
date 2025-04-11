@@ -74,7 +74,7 @@ session_start();
         }
 
         .btn-action {
-            background-color:rgb(41, 219, 198);
+            background-color: rgb(41, 219, 198);
             width: 200px;
             border: none;
             color: white;
@@ -100,7 +100,7 @@ session_start();
             justify-content: center;
             align-items: center;
             display: none;
-            
+
         }
 
         .cat-dialog-content,
@@ -131,7 +131,7 @@ session_start();
 
         .cat-dialog-content button,
         .note-dialog-content button {
-            background-color:rgb(41, 219, 198);
+            background-color: rgb(41, 219, 198);
             border: none;
             color: white;
             padding: 10px 20px;
@@ -192,7 +192,7 @@ session_start();
             min-width: 60%;
             margin: 20px auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(5px);
             border-radius: 25px;
             overflow: auto;
@@ -213,19 +213,20 @@ session_start();
             width: 100%;
         }
 
-        .delete {
-            background-color: #f44336;
-            color: white;
+        button.edit,
+        button.delete {
+            background: none;
             border: none;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            margin: 0;
             cursor: pointer;
-            border-radius: 5px;
-            float: right;
+            padding: 5px;
+        }
+
+        button.edit .material-icons {
+            color: #1976d2;
+        }
+
+        button.delete .material-icons {
+            color: #d32f2f;
         }
 
         /* Media query per schermi grandi */

@@ -19,11 +19,15 @@ if ($result->num_rows > 0) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) { 
+    if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<div id='note_" . $row['id'] . "'>";
             echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
-            echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'>Elimina</button>";
+            echo "<button class='edit' onclick='editNote(" . $row['id'] . ")'>
+            <span class='material-icons'>edit</span></button>";
+            echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'>
+            <span class='material-icons'>delete</span>
+          </button>";
             echo "<h2>" . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . "</h2>";
             echo "<p><strong>Categoria:</strong> " . htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8') . "</p>";
             echo "<p>" . htmlspecialchars($row['body'], ENT_QUOTES, 'UTF-8') . "</p>";
@@ -41,35 +45,34 @@ if ($result->num_rows > 0) {
 
 ?>
 <script>
-   function deleteNote(noteId) {
-    if (confirm("Sei sicuro di voler eliminare questa nota?")) {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "deleteNote.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    function deleteNote(noteId) {
+        if (confirm("Sei sicuro di voler eliminare questa nota?")) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "deleteNote.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        //rimuovo nota dal DOM senza ricaricare la pagina
-                        const noteBox = document.getElementById("note_" + noteId);
-                        if (noteBox) {
-                            noteBox.remove();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            //rimuovo nota dal DOM senza ricaricare la pagina
+                            const noteBox = document.getElementById("note_" + noteId);
+                            if (noteBox) {
+                                noteBox.remove();
+                            }
+                        } else {
+                            alert(response.message);
                         }
-                    } else {
-                        alert(response.message);
+                    } catch (e) {
+                        alert("Errore nel parsing della risposta del server");
                     }
-                } catch (e) {
-                    alert("Errore nel parsing della risposta del server");
                 }
-            }
-        };
+            };
 
-        xhr.send("noteId=" + noteId);
+            xhr.send("noteId=" + noteId);
+        }
     }
-}
-
 </script>
 
 <?php
