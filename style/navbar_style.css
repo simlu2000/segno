@@ -1,5 +1,5 @@
 nav {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.516);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
     position: relative;
@@ -11,6 +11,7 @@ nav {
 }
 
 nav ul {
+    background-color: rgba(255, 255, 255, 0.516);
     list-style: none;
     display: flex;
     justify-content: center;
@@ -70,8 +71,8 @@ nav ul li button:hover {
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.9);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.516);
         z-index: 1000;
     }
 
@@ -82,6 +83,7 @@ nav ul li button:hover {
     .menu-toggle {
         display: block;
     }
+
 }
 
 .dialog {

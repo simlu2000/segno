@@ -130,12 +130,96 @@ footer {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 50px;
 }
-
+@media (max-width :1024px){
+  .content {
+    padding: 40px;
+    margin: 0 8%;
+  }
+  
+  .content h1 {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    color: #4a4a4a;
+  }
+  
+  .content p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    text-align: left;
+    margin-right:10%;
+  }
+  #logo {
+    width:100%;
+    height: auto;
+    margin: 0 auto;
+  }
+  #logo-area {
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+  }
+}
 @media (max-width: 491px) {
   .content {
       flex-direction: column;
       justify-content: center;
       align-items: center;
       margin: 0;
+  }
+  #logo {
+    width:100%;
+    height: auto;
+    margin: 0 auto;
+  }
+  #logo-area {
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+  }
+  #features {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 5%;
+  }
+  
+  #features-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
+  
+  }
+  
+  #features-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .feature {
+    background-color: rgba(255, 255, 255, 0.54);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+    flex: 1;
+    width:90%;
+    margin: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
   }
 }

@@ -395,6 +395,10 @@ button.delete .material-icons {
         margin-right: 5%;
         margin-left: 5%;
         width: auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
     }
 }
 
