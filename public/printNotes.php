@@ -4,6 +4,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
 $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
 $stmt->bind_param("s", $_SESSION["email"]);
 $stmt->execute();
@@ -13,19 +14,31 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $userId = $row['id'];
 
-    // Prendo le note dal database
-    $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ?");
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (isset($_GET["search"])) {
+        $searchTerm = "%" . $_GET["search"] . "%";
+        $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ? AND (title LIKE ? OR body LIKE ? OR category LIKE ?)");
+        $stmt->bind_param("isss", $userId, $searchTerm, $searchTerm, $searchTerm);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    }
 
     if ($result->num_rows > 0) {
+        if (isset($_GET["search"])) {
+            echo "<p class='search-result'>Risultati per: " . htmlspecialchars($_GET["search"], ENT_QUOTES, 'UTF-8') . "<button style='font-size: 24px; width:10px; height:50px; background: none; border: none; color: #f44336; cursor: pointer;' title='Cancella ricerca' onclick='reloadNotes()'>&times;</button></p>";
+        } 
+
         while ($row = $result->fetch_assoc()) {
             echo "<div id='note_" . $row['id'] . "'>";
             echo "<div class='note' style='border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0;'>";
             echo "<button class='edit' onclick='editNote(" . $row['id'] . ")'><span class='material-icons'>edit</span></button>";
             echo "<button class='delete' onclick='deleteNote(" . $row['id'] . ")'><span class='material-icons'>delete</span></button>";
 
+            /*form modifica nota*/
             echo "<form class='edit-form' id='form_" . $row['id'] . "' style='display: none; margin-top:10px;' onsubmit='return submitEdit(" . $row['id'] . ")'>";
             echo "<input type='text' name='title' value='" . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . "' required>";
             echo "<input type='text' name='category' value='" . htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8') . "' required>";
@@ -81,44 +94,47 @@ if ($result->num_rows > 0) {
     }
 
     function editNote(noteId) { //quanndo clicco su edit
-    //mostra form di modifica
-    document.getElementById("form_" + noteId).style.display = "block";
-}
+        //mostra form di modifica
+        document.getElementById("form_" + noteId).style.display = "block";
+    }
 
-function cancelEdit(noteId) {
-    //nasconde form senza salvare
-    document.getElementById("form_" + noteId).style.display = "none";
-}
+    function cancelEdit(noteId) {
+        //nasconde form senza salvare
+        document.getElementById("form_" + noteId).style.display = "none";
+    }
 
-function submitEdit(noteId) {
-    const form = document.getElementById("form_" + noteId);
-    const formData = new FormData(form); //creo un oggetto FormData con i dati del form
-    formData.append("noteId", noteId); //aggiungo l'ID della nota
+    function submitEdit(noteId) {
+        const form = document.getElementById("form_" + noteId);
+        const formData = new FormData(form); //creo un oggetto FormData con i dati del form
+        formData.append("noteId", noteId); //aggiungo l'ID della nota
 
-    const xhr = new XMLHttpRequest(); //creo una nuova richiesta
-    xhr.open("POST", "editNote.php", true); //invio la richiesta al server
+        const xhr = new XMLHttpRequest(); //creo una nuova richiesta
+        xhr.open("POST", "editNote.php", true); //invio la richiesta al server
 
-    xhr.onreadystatechange = function() { //quando la richiesta è completata
-        //controllo se la richiesta è completata e se il server ha risposto con successo
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    alert("Nota modificata con successo!");
-                    location.reload(); //oppure aggiorno solo il DOM
-                } else {
-                    alert(response.message);
+        xhr.onreadystatechange = function() { //quando la richiesta è completata
+            //controllo se la richiesta è completata e se il server ha risposto con successo
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        alert("Nota modificata con successo!");
+                        location.reload(); //oppure aggiorno solo il DOM
+                    } else {
+                        alert(response.message);
+                    }
+                } catch (e) {
+                    alert("Errore nel parsing della risposta del server");
                 }
-            } catch (e) {
-                alert("Errore nel parsing della risposta del server");
             }
-        }
-    };
+        };
 
-    xhr.send(formData);
-    return false; // Evita il submit classico del form
-}
+        xhr.send(formData);
+        return false; //evita submit classico del form
+    }
 
+    function reloadNotes() {
+        window.location.href = "notes.php";
+    }
 </script>
 
 <?php

@@ -1,2 +1,141 @@
-body{
+body {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(323deg, #e0f7fa, #c2e9fb, #7AFFEF);
+  background-size: 180% 180%;
+  animation: gradient-animation 15s ease infinite;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  margin: 0 5%;
+}
+
+.content h1 {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: #4a4a4a;
+}
+
+.content p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 600px;
+  text-align: center;
+}
+
+#features {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0 5%;
+}
+
+#features-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px 0;
+  padding: 20px;
+
+}
+
+#features-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature {
+  background-color: rgba(255, 255, 255, 0.54);
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+  flex: 1;
+  margin: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+#cta {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 20px 0;
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+#cta-area{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+
+}
+.btn{
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 10px;
+}
+
+#logo {
+  border-radius: 50px;
+}
+
+footer {
+  text-align: center;
+  padding: 10px 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  color: #777;
+}
+
+#logo-area {
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+}
+
+@media (max-width: 491px) {
+  .content {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
   }
+}
