@@ -15,12 +15,12 @@ if ($result->num_rows > 0) {
     $userId = $row['id'];
 
     if (isset($_GET["search"])) {
-        $searchTerm = "%" . $_GET["search"] . "%";
+        $searchTerm = "%" . $_GET["search"] . "%"; // . per concatenare le stringhe. % per like 
         $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ? AND (title LIKE ? OR body LIKE ? OR category LIKE ?)");
         $stmt->bind_param("isss", $userId, $searchTerm, $searchTerm, $searchTerm);
         $stmt->execute();
         $result = $stmt->get_result();
-    } else {
+    } else { //altrimenti se non ce parola cercata prendo tutto dalla tabella
         $stmt = $conn->prepare("SELECT * FROM notes WHERE userId = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
     if ($result->num_rows > 0) {
         if (isset($_GET["search"])) {
             echo "<p class='search-result'>Risultati per: " . htmlspecialchars($_GET["search"], ENT_QUOTES, 'UTF-8') . "<button style='font-size: 24px; width:10px; height:50px; background: none; border: none; color: #f44336; cursor: pointer;' title='Cancella ricerca' onclick='reloadNotes()'>&times;</button></p>";
-        } 
+        }
 
         while ($row = $result->fetch_assoc()) {
             echo "<div id='note_" . $row['id'] . "'>";
@@ -66,10 +66,12 @@ if ($result->num_rows > 0) {
 <script>
     function deleteNote(noteId) {
         if (confirm("Sei sicuro di voler eliminare questa nota?")) {
-            const xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest(); //creo oggetto XMLHttpRequest per inviare la richiesta al server
+            // Configuro la richiesta HTTP: metodo POST e URL del file PHP che gestisce l'eliminazione
             xhr.open("POST", "deleteNote.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); //imposto l'header della richiesta per indicare il tipo di contenuto
+            
+            // Definisco cosa fare quando cambia lo stato della richiesta
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     try {
@@ -88,7 +90,6 @@ if ($result->num_rows > 0) {
                     }
                 }
             };
-
             xhr.send("noteId=" + noteId);
         }
     }
@@ -103,34 +104,55 @@ if ($result->num_rows > 0) {
         document.getElementById("form_" + noteId).style.display = "none";
     }
 
+    // Funzione per inviare i dati di modifica di una nota al server
     function submitEdit(noteId) {
+        // Seleziono il form specifico legato all'ID della nota
         const form = document.getElementById("form_" + noteId);
-        const formData = new FormData(form); //creo un oggetto FormData con i dati del form
-        formData.append("noteId", noteId); //aggiungo l'ID della nota
 
-        const xhr = new XMLHttpRequest(); //creo una nuova richiesta
-        xhr.open("POST", "editNote.php", true); //invio la richiesta al server
+        // Creo un oggetto FormData con i dati inseriti nel form della singola nota
+        // FormData è un oggetto che permette di costruire un insieme di coppie chiave/valore
+        const formData = new FormData(form);
 
-        xhr.onreadystatechange = function() { //quando la richiesta è completata
-            //controllo se la richiesta è completata e se il server ha risposto con successo
+        // Aggiungo anche l'ID della nota tra i dati da inviare
+        formData.append("noteId", noteId);
+
+        // Creo un oggetto XMLHttpRequest per inviare i dati al server
+        const xhr = new XMLHttpRequest();
+
+        // Configuro la richiesta HTTP: metodo POST e URL del file PHP che gestisce la modifica
+        xhr.open("POST", "editNote.php", true);
+
+        // Definisco cosa fare quando cambia lo stato della richiesta
+        xhr.onreadystatechange = function() {
+            // Verifico che la richiesta sia completata (readyState 4) e che il server abbia risposto correttamente (status 200)
             if (xhr.readyState === 4 && xhr.status === 200) {
                 try {
+                    // Provo a convertire la risposta del server da JSON a oggetto JS
                     const response = JSON.parse(xhr.responseText);
+
+                    // Se il server ha confermato la modifica con successo
                     if (response.success) {
                         alert("Nota modificata con successo!");
-                        location.reload(); //oppure aggiorno solo il DOM
+                        // Ricarico la pagina per mostrare i cambiamenti (oppure potrei aggiornare il DOM dinamicamente)
+                        location.reload();
                     } else {
+                        // Se il server ha restituito un errore, mostro il messaggio
                         alert(response.message);
                     }
                 } catch (e) {
+                    // Se c'è un errore nel parsing della risposta JSON, avviso l'utente
                     alert("Errore nel parsing della risposta del server");
                 }
             }
         };
 
+        // Invio i dati del form al server
         xhr.send(formData);
-        return false; //evita submit classico del form
+
+        // Impedisco l'invio classico del form (che ricaricherebbe la pagina)
+        return false;
     }
+
 
     function reloadNotes() {
         window.location.href = "notes.php";

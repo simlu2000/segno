@@ -17,10 +17,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
+    $user = $result->fetch_assoc(); // Ottieni i dati dell'utente come array associativo 
 
-    // Verifica password
-    if (password_verify($password, $user['password'])) {
+    // Verifica password nel db corripsponda a quella inserita
+    if (password_verify($password, $user['password'])) { //se true
         $_SESSION["email"] = $user['email'];
         $_SESSION["username"] = $user['username'];
         header("Location: notes.php");

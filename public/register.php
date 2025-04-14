@@ -21,9 +21,11 @@ $result = $stmt->get_result(); // Ottengo il risultato della query
 if ($result->num_rows > 0) { // Se l'utente esiste già
     echo "Utente già registrato";
 } else {
-    // Hash della password
+    //Se inseriamo cosi la password rimane in chiaro nel database, quindi usiamo password_hash per criptarla
+    // Hash della password con PASSWORD_DEFAULT che è l'algoritmo di hashing predefinito di PHP
+    // PASSWORD_DEFAULT usa bcrypt, che è un algoritmo di hashing sicuro e lento, rendendo difficile l'attacco con forza bruta
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
+    
     // Inserisco l'utente nel database
     $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $username, $email, $hashedPassword); // sss per tre stringhe

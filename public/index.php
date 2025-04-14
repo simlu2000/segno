@@ -37,7 +37,7 @@ session_start();
             <div class="feature">Cerca facilmente tra i tuoi appunti</div>
         </div>
 
-        <?php if(isset($_SESSION['user'])): ?>
+        <?php if(!isset($_SESSION['user'])): ?>
         <div id="cta">
             <h1>Inizia ora!</h1>
             <div id="cta-area">
